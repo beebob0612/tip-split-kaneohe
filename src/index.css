@@ -7,7 +7,7 @@ html, body, #root {
 }
 
 body {
-  background: #141210;
+  background: #ffffff;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -27,4 +27,15 @@ input[type="number"] {
     64% 12px, 68% 0%, 72% 12px, 76% 0%, 80% 12px, 84% 0%, 88% 12px, 92% 0%,
     96% 12px, 100% 0%, 100% 100%, 0% 100%
   );
+}
+
+/* Traces a hairline outline that follows the zigzag edge, since a normal
+   border would be cut away by the clip-path. */
+.ticket-frame {
+  filter:
+    drop-shadow(1px 0 0 #cec2ad)
+    drop-shadow(-1px 0 0 #cec2ad)
+    drop-shadow(0 1px 0 #cec2ad)
+    drop-shadow(0 -1px 0 #cec2ad)
+    drop-shadow(0 14px 26px rgba(20, 18, 16, 0.16));
 }

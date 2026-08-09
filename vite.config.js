@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.png'],
       manifest: {
-        name: 'Tip Split — Kickin\' Kajun',
-        short_name: 'Tip Split',
+        name: 'Tip Calculator — Kickin\' Kajun',
+        short_name: 'Tip Calc',
         description: 'Kāneʻohe tip payout calculator',
         theme_color: '#141210',
         background_color: '#141210',

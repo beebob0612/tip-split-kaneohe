@@ -5,15 +5,19 @@ const fmt = (n) =>
 
 const floorRound = (n) => Math.floor(n + 0.5);
 
-function NumField({ label, value, onChange, prefix, placeholder = "0" }) {
+function NumField({ label, value, onChange, prefix, placeholder = "0", grow = false }) {
   return (
-    <label className="block">
-      <span className="block font-display text-[13px] tracking-[0.18em] text-sand/50 uppercase mb-1.5">
+    <label className={`block ${grow ? "flex-1 flex flex-col" : ""}`}>
+      <span className="block font-display text-[15px] tracking-[0.14em] text-char-400 uppercase mb-2">
         {label}
       </span>
-      <div className="flex items-center bg-char-800 border border-char-700 rounded-lg focus-within:border-rust-500 transition-colors">
+      <div
+        className={`flex items-center bg-sand/40 border border-char-200 rounded-lg focus-within:border-rust-500 focus-within:bg-white transition-colors ${
+          grow ? "flex-1 justify-center" : ""
+        }`}
+      >
         {prefix && (
-          <span className="pl-3.5 font-mono text-lg text-sand/40 select-none">{prefix}</span>
+          <span className="pl-4 font-mono text-xl text-char-400 select-none">{prefix}</span>
         )}
         <input
           type="number"
@@ -21,7 +25,9 @@ function NumField({ label, value, onChange, prefix, placeholder = "0" }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent py-3.5 pr-3.5 pl-2 font-mono text-xl text-sand placeholder:text-sand/25 outline-none"
+          className={`w-full bg-transparent pr-4 pl-2.5 font-mono text-char-950 placeholder:text-char-400/40 outline-none ${
+            grow ? "text-3xl py-2 text-center" : "text-2xl py-4"
+          }`}
         />
       </div>
     </label>
@@ -63,56 +69,69 @@ export default function App() {
   const hasInput = cashTip || serviceCharge || ccTip || serverCount || cookCount;
 
   return (
-    <div className="min-h-screen bg-char-950 text-sand font-body">
+    <div className="min-h-screen bg-white text-char-950 font-body">
       <div className="max-w-md mx-auto px-5 pt-8 pb-16">
         {/* Header */}
-        <header className="mb-7">
-          <p className="font-display text-[13px] tracking-[0.3em] text-rust-500 uppercase mb-1">
-            Kickin&rsquo; Kajun · Kāneʻohe
+        <header className="mb-9">
+          <p className="font-display text-[15px] tracking-[0.3em] text-rust-500 uppercase mb-2">
+            Kickin&rsquo; Kajun
           </p>
-          <h1 className="font-display text-[40px] leading-[0.95] tracking-tight text-sand uppercase">
-            Tip Split
+          <h1 className="font-display text-[46px] leading-[1] tracking-tight text-char-950">
+            Tip Calculator
           </h1>
+          <p className="font-body text-[17px] text-char-400 mt-1.5">Kāneʻohe Location</p>
         </header>
 
-        {/* Tip inputs */}
-        <section className="grid grid-cols-3 gap-2.5 mb-3">
-          <NumField label="Cash" prefix="$" value={cashTip} onChange={setCashTip} />
-          <NumField label="Svc Chg" prefix="$" value={serviceCharge} onChange={setServiceCharge} />
-          <NumField label="CC Tip" prefix="$" value={ccTip} onChange={setCcTip} />
-        </section>
+        {/* Tips + staff, 3:2 split, both columns equal height */}
+        <section className="grid grid-cols-5 gap-3 mb-9 items-stretch">
+          <div className="col-span-3 flex flex-col">
+            <p className="font-display text-[15px] tracking-[0.2em] text-char-400 uppercase mb-3">
+              Tips Collected
+            </p>
+            <div className="space-y-3">
+              <NumField label="Cash Tip" prefix="$" value={cashTip} onChange={setCashTip} />
+              <NumField label="Service Charge" prefix="$" value={serviceCharge} onChange={setServiceCharge} />
+              <NumField label="Credit Card Tip" prefix="$" value={ccTip} onChange={setCcTip} />
+            </div>
+          </div>
 
-        {/* Headcount inputs */}
-        <section className="grid grid-cols-2 gap-2.5 mb-8">
-          <NumField label="Servers" value={serverCount} onChange={setServerCount} placeholder="0" />
-          <NumField label="Cooks" value={cookCount} onChange={setCookCount} placeholder="0" />
+          <div className="col-span-2 flex flex-col">
+            <p className="font-display text-[15px] tracking-[0.2em] text-char-400 uppercase mb-3">
+              Staff
+            </p>
+            <div className="flex-1 flex flex-col gap-3">
+              <NumField label="Servers" value={serverCount} onChange={setServerCount} placeholder="0" grow />
+              <NumField label="Cooks" value={cookCount} onChange={setCookCount} placeholder="0" grow />
+            </div>
+          </div>
         </section>
 
         {/* Receipt / result ticket */}
         <section className="relative">
-          <div className="ticket-edge-top bg-sand text-char-950 pt-5 px-6 pb-7 rounded-b-md shadow-[0_20px_40px_-16px_rgba(0,0,0,0.6)]">
-            <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-char-950/50 text-center mb-4">
+          <div className="ticket-frame">
+            <div className="ticket-edge-top bg-sand text-char-950 pt-6 px-6 pb-8 rounded-b-md">
+            <p className="font-mono text-[12px] tracking-[0.25em] uppercase text-char-400 text-center mb-5">
               — Payout —
             </p>
 
-            <div className="space-y-3 font-mono text-[15px]">
-              <div className="flex justify-between items-baseline text-char-950/60">
-                <span>House fee</span>
+            <div className="space-y-4 font-mono text-[17px]">
+              <div className="flex justify-between items-baseline text-char-400">
+                <span>House Fee</span>
                 <span>${fmt(result.houseFee)}</span>
               </div>
 
-              <div className="border-t border-dashed border-char-950/20 my-3" />
+              <div className="border-t border-dashed border-char-200 my-3" />
 
               <div className="flex justify-between items-baseline">
                 <span>
                   Server{result.servers > 1 ? "s" : ""}
                   {result.servers > 0 && (
-                    <span className="text-char-950/45"> ×{result.servers}</span>
+                    <span className="text-char-400"> ×{result.servers}</span>
                   )}
                 </span>
-                <span className="text-lg font-semibold text-rust-600">
+                <span className="text-2xl font-semibold text-rust-600">
                   {result.serverPer === null ? "—" : `$${fmt(result.serverPer)}`}
-                  <span className="text-[11px] font-normal text-char-950/45"> /ea</span>
+                  <span className="text-[13px] font-normal text-char-400"> each</span>
                 </span>
               </div>
 
@@ -120,21 +139,15 @@ export default function App() {
                 <span>
                   Cook{result.cooks > 1 ? "s" : ""}
                   {result.cooks > 0 && (
-                    <span className="text-char-950/45"> ×{result.cooks}</span>
+                    <span className="text-char-400"> ×{result.cooks}</span>
                   )}
                 </span>
-                <span className="text-lg font-semibold text-okra-400">
+                <span className="text-2xl font-semibold text-okra-600">
                   {result.cookPer === null ? "—" : `$${fmt(result.cookPer)}`}
-                  <span className="text-[11px] font-normal text-char-950/45"> /ea</span>
+                  <span className="text-[13px] font-normal text-char-400"> each</span>
                 </span>
               </div>
             </div>
-
-            <div className="border-t border-dashed border-char-950/20 mt-4 pt-3">
-              <div className="flex justify-between items-baseline font-mono text-[12px] text-char-950/45">
-                <span>Distributed pool</span>
-                <span>${fmt(result.pool)}</span>
-              </div>
             </div>
           </div>
         </section>
@@ -142,13 +155,15 @@ export default function App() {
         <button
           onClick={clearAll}
           disabled={!hasInput}
-          className="w-full mt-6 py-3 rounded-lg border border-char-700 font-display tracking-[0.15em] text-[13px] uppercase text-sand/50 disabled:opacity-30 active:bg-char-800 transition-colors"
+          className="w-full mt-6 py-3.5 rounded-lg border border-char-700 font-display tracking-[0.15em] text-[15px] uppercase text-char-950/60 disabled:opacity-30 active:bg-char-950/5 transition-colors"
         >
           Clear
         </button>
 
-        <p className="text-center font-mono text-[11px] text-sand/25 mt-8">
-          House fee 10% of (Svc Chg + CC Tip) · Pool split 80 / 20
+        <p className="text-center font-mono text-[13px] text-char-400/70 mt-8 leading-relaxed">
+          House Fee = 10% of (Service Charge + Credit Card Tip)
+          <br />
+          Remaining split 80% Servers / 20% Cooks
         </p>
       </div>
     </div>
