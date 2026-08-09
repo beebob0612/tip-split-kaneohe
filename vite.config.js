@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'Tip Calculator — Kickin\' Kajun',
         short_name: 'Tip Calc',
         description: 'Kāneʻohe tip payout calculator',
-        theme_color: '#141210',
-        background_color: '#141210',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
         display: 'standalone',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
